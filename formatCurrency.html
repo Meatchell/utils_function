@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>金额处理</title>
+</head>
+<body>
+<script>
+  console.log(formatCurrency('0.01'),formatCurrency('001'),formatCurrency('100000000'), formatCurrency(-100))
+  // 添加千位符、保留两位小数
+  function formatCurrency(num) {
+    num = num.toString().replace(/\$|\,/g, '');
+    if (isNaN(num))
+      num = "0";
+    let sign = (num - 0 === (num = Math.abs(num)));
+    num = Math.floor(num * 100 + 0.50000000001);
+    let cents = num % 100;
+    num = Math.floor(num / 100).toString();
+    if (cents < 10)
+      cents = "0" + cents;
+    for (let i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
+      num = num.substring(0, num.length - (4 * i + 3)) + ',' +
+        num.substring(num.length - (4 * i + 3));
+    return (((sign) ? '' : '-') + num + '.' + cents);
+  }
+</script>
+</body>
+</html>
