@@ -72,3 +72,29 @@ export const createGuid = () => {
   var ret = uuid.join('')
   return ret
 }
+
+/**
+ * 根据parentID 将数据转换为树状结构
+ * @param {Array} list
+ * @param {string} idstr
+ * @param {string} pidstr
+ * @returns {Array}
+ */
+export function transData(list, idstr, pidstr) {
+  const result = []
+  const temp = {}
+  for (var i = 0; i < list.length; i++) {
+    temp[list[i][idstr]] = list[i] // 将nodes数组转成对象类型
+  }
+  for (var j = 0; j < list.length; j++) {
+    const tempVp = temp[list[j][pidstr]] // 获取每一个子对象的父对象
+    if (tempVp) {
+      // 判断父对象是否存在，如果不存在直接将对象放到第一层
+      if (!tempVp['children']) tempVp['children'] = [] // 如果父元素的nodes对象不存在，则创建数组
+      tempVp['children'].push(list[j]) // 将本对象压入父对象的nodes数组
+    } else {
+      result.push(list[j]) // 将不存在父对象的对象直接放入一级目录
+    }
+  }
+  return result
+}
